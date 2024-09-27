@@ -18,14 +18,20 @@ export default function Todo(props) {
     return ref.current;
   }
 
-  // 当list里面任意一个变量发生变化时， 执行第一个函数
+  const wasEditing = usePrevious(isEditing);
+  console.log(wasEditing);
+  console.log(isEditing.usePrevious)
+  // 当list里面任意一个变量发生变化时，执行第一个函数
+  // 当list不存在 每次都执行
+  // 当list为空 只在第一次的时候执行
   useEffect(() => {
-    if (isEditing) {
+    if (!wasEditing && isEditing) {
       editFieldRef.current.focus();
-    } else {
+    } else if (wasEditing && !isEditing) {
       editButtonRef.current.focus();
     }
-  }, [isEditing]);
+  }, [wasEditing, isEditing]);
+
 
   function handleChange(e) {
     setNewName(e.target.value);
